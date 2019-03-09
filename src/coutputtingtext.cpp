@@ -7,11 +7,14 @@
 //============================================================================
 
 #include <iostream>
+#include <sstream> // use this to build string format
 #include <limits>
 #include <string>
 #include <iomanip> // you can use fixed etc
 #include "utils.h"
 #include "Cat.h"
+#include "Dog.h"
+#include "Person.h"
 using namespace std;
 
 //prototype
@@ -42,8 +45,35 @@ int main() {
 	loop();
 	cout << switch_ex(10) << endl;
 
-	speak();
+	// use curly bracket the object only exits in the scope
+	// object is destroyed after the scope
+	{
+		Cat cat; // instantiate cat object
+		cat.makeHappy();
+		cat.speak();
+		cat.jump();
+	}
 
+	Person person;
+	person.setName("John");
+	cout << "The name is " << person.getName() << endl;
+
+    cout << "ending program" << endl;
+
+    //stringstream from <sstream>
+    // we can use this to turn things into a single string
+    stringstream ss;
+    int age = 38;
+    float height = 10.9;
+
+    ss << "My name is ";
+    ss << person.getName();
+    ss << " and my age is ";
+    ss << age;
+    ss << " and height is ";
+    ss << height;
+    string info = ss.str(); //use the .str() method to get string
+    cout << info << endl;
 
 	return 0;
 }

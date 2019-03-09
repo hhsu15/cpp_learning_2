@@ -5,14 +5,20 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
 ../src/Cat.cpp \
+../src/Dog.cpp \
+../src/Person.cpp \
 ../src/coutputtingtext.cpp 
 
 OBJS += \
 ./src/Cat.o \
+./src/Dog.o \
+./src/Person.o \
 ./src/coutputtingtext.o 
 
 CPP_DEPS += \
 ./src/Cat.d \
+./src/Dog.d \
+./src/Person.d \
 ./src/coutputtingtext.d 
 
 
