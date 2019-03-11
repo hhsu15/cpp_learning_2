@@ -20,7 +20,8 @@ using namespace std;
 //prototype
 string sayHello();
 string switch_ex(int val);
-
+void changeInt(int *ptr_num); //pointer
+void charArray();
 
 int main() {
 	/*
@@ -54,10 +55,9 @@ int main() {
 		cat.jump();
 	}
 
-	Person person;
+	Person person("Hsin");
 	person.setName("John");
 	cout << "The name is " << person.getName() << endl;
-
     cout << "ending program" << endl;
 
     //stringstream from <sstream>
@@ -75,6 +75,51 @@ int main() {
     string info = ss.str(); //use the .str() method to get string
     cout << info << endl;
 
+    //memory location of an object - will be same as "this"
+    cout << "Memory location of the object: " << &person << endl;
+
+    //another person object using the short hand
+    stringstream ss2;
+    Person person2("Jess", 30);
+    ss2 << "person2's name is ";
+    ss2 << person2.getName();
+    ss2 << " and age is ";
+    ss2 << person2.getAge();
+    string person2_info = ss2.str();
+    cout << person2_info << endl;
+
+    //------pointer------
+    int myNum = 10;
+    cout << "Before value: "<< myNum << endl;
+    changeInt(&myNum);
+    cout << "After value: "<< myNum << endl;
+
+    //array pointer
+    string names[] = {"Hsin", "Kyle", "Jess"};
+    cout << names << endl; //this gives you the pointer
+    string *pnames = names;
+    pnames ++;
+    cout << *pnames << endl; //this will print kyle
+
+    //use pointer to loop thru the array
+    string *ptname = &names[0];
+    string *ptendname = &names[2];
+
+    while (true) {
+    	cout << "element: " << *ptname << endl;
+    	if (ptname == ptendname) {
+    		break;
+    	}
+    	ptname++;
+    }
+
+    // pointer arithmetic
+    string *pstartname = &names[0];
+    string *pendname = &names[3];
+    int lenOfNames = pendname - pstartname;
+    cout << lenOfNames << endl; // print out 3
+
+    charArray();
 	return 0;
 }
 
@@ -136,5 +181,39 @@ string switch_ex(int val){
 	default:
         return "NO";
 
+	}
+}
+
+void changeInt(int *ptr_num) {
+	// dereference
+	cout << "pointer:" << ptr_num << endl;
+	cout << "value stored in the pointer:" << *ptr_num << endl;
+	*ptr_num = 40;
+}
+
+void charArray() {
+	char text[] = "hi";
+	cout << text << endl; //will print hi
+
+	//loop thur chars
+	for (int i=0; i<sizeof(text); i++) {
+    	cout << i << ": " << text[i] << endl;
+	}
+
+	// loop thru char array and stop at the end of array
+	int k = 0;
+	while (true) {
+		// break when the element value is 0
+		if (text[k] == 0) {
+			break;
+		}
+		cout << text[k] << endl;
+		k++;
+	}
+
+	// does the same thing
+	string text2 = "hello";
+	for (int i=0; i<5; i++) {
+		cout << text2[i] << endl;
 	}
 }
