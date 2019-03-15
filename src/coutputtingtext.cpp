@@ -22,6 +22,9 @@ string sayHello();
 string switch_ex(int val);
 void changeInt(int *ptr_num); //pointer
 void charArray();
+void reserveString(char target[], int size);
+void changeByReference(int &num);
+void changeByRefArr(int (&num)[2]);
 
 int main() {
 	/*
@@ -88,6 +91,10 @@ int main() {
     string person2_info = ss2.str();
     cout << person2_info << endl;
 
+    // alternatively, create a new instance using pointer
+    Person *pperson = new Person("Kyle");
+    cout << pperson->getName() << endl;
+
     //------pointer------
     int myNum = 10;
     cout << "Before value: "<< myNum << endl;
@@ -119,7 +126,22 @@ int main() {
     int lenOfNames = pendname - pstartname;
     cout << lenOfNames << endl; // print out 3
 
-    charArray();
+    //charArray();
+
+    cout << "Test reverseString function"<< endl; // print out 3
+    char target[] = "hello I am Hsin";
+    reserveString(target, sizeof(target)-1);
+    cout << "after: " << target << endl;
+
+    //trying changing the number by passing the reference
+    int myNumber = 20;
+    changeByReference(myNumber);
+    cout << myNumber << endl;
+
+    int numArr[] = {1, 2};
+    changeByRefArr(numArr);
+    cout << numArr[0] << endl;
+
 	return 0;
 }
 
@@ -216,4 +238,28 @@ void charArray() {
 	for (int i=0; i<5; i++) {
 		cout << text2[i] << endl;
 	}
+}
+
+void reserveString(char target[], int size) {
+	 //continue to swap start and end
+	 char *pstart = &target[0];
+	 char *pend = &target[size-1];
+     while (pstart < pend) {
+    	 char tmp = *pstart;
+         *pstart = *pend;
+         *pend = tmp;
+         pstart++;
+         pend--;
+     }
+
+}
+
+void changeByReference(int &num){
+	// the variable that gets passed into is a reference
+	// meaning changing this one will change the original
+	num = 10000;
+};
+
+void changeByRefArr(int (&num)[2]){
+	num[0] = 1000;
 }

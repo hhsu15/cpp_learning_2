@@ -28,6 +28,7 @@ public:
 	void setName(string newName);
 	string getName();
 	int getAge();
+
 };
 
 #endif /* PERSON_H_ */
