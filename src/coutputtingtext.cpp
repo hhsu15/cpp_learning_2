@@ -26,6 +26,36 @@ void reserveString(char target[], int size);
 void changeByReference(int &num);
 void changeByRefArr(int (&num)[2]);
 
+//inline class
+//
+class Bird {
+private:
+	string name;
+
+public:
+	Bird(){cout << "Bird created" << endl;};
+	//copy object by passing the reference
+	//by default, C++ creates a copy rather than a reference like python!
+	//but the copy will not have the attributesm, such as name
+	//so we need to use this to set the name as the obj we copy from
+	Bird(const Bird& other):name(other.name){cout << "Bird created by copying" << endl;};
+	void setName(string new_name){this->name=new_name;};
+	// if you have a method that does not change data you should declear as const
+	void speak() const {cout << "My name is " << name << endl;};
+	~Bird(){cout<< name << " is destroyed"<< endl;};
+};
+
+//this is the best practice
+//return a variable which will go out of scope is bad -> memoty leak
+//so we should return a pointer
+// when a function returns a pointer, you have * in the function name
+// thus Bird *createBird(..
+Bird *createBird(string nm){
+	Bird *pnewbird = new Bird();
+	pnewbird->setName(nm);
+	return pnewbird;
+}
+
 int main() {
 	/*
 	 get user input
@@ -141,6 +171,33 @@ int main() {
     int numArr[] = {1, 2};
     changeByRefArr(numArr);
     cout << numArr[0] << endl;
+
+    Bird bird;
+    bird.setName("Fred");
+    bird.speak();
+
+    //calling copy constructor implicitly
+    Bird bird2 = bird; //by default, C++ creates a copy rather than a reference
+    bird2.speak();
+    bird2.setName("Bob");
+    bird2.speak();
+    bird.speak();
+
+    //calling copy constructor directly, same effect as above
+    Bird bird3(bird2);
+    bird3.speak();
+
+    //use "new" operator to instantiate an object
+    //declare a pointer variable
+    Bird *pbird4 = new Bird();
+    pbird4->setName("John"); //use -> to call the method
+    pbird4->speak();
+    delete pbird4; //need to destroy this bc c++ won't do it for you if you use "new"
+
+    Bird *bird5 = createBird("bird5");
+    bird5->speak();
+    delete bird5; // now make sure we delete it since it's created via "new"
+
 
 	return 0;
 }
