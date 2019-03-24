@@ -6,7 +6,8 @@
 // Description : Hello World in C++, Ansi-style
 //============================================================================
 
-#include <iostream>
+//preprocessing directive
+//#include <iostream>
 #include <sstream> // use this to build string format
 #include <limits>
 #include <string>
@@ -15,7 +16,9 @@
 #include "Cat.h"
 #include "Dog.h"
 #include "Person.h"
+#include "Pig.h"
 using namespace std;
+//using namespace hh; //you can either use this or directly in the code using hh:
 
 //prototype
 string sayHello();
@@ -25,15 +28,50 @@ void charArray();
 void reserveString(char target[], int size);
 void changeByReference(int &num);
 void changeByRefArr(int (&num)[2]);
+void passArrayToFunc(int sizeoftexts, string texts[]);
+char *getMemory();
+void freeMemory(char *pArr);
+int *getnumArr();
+
+class Animal {
+private:
+	int id;
+	static int const MAX = 99; //static variable as const
+	static int animalCount; //static variable has to be assigned separately
+public:
+	Animal():id(0){animalCount++;}; // initialize id of 0 if not provided
+	Animal(int id): id(id) {animalCount++;};
+	//static variable - bound to the class, you can access without using an obj
+
+	void jump(){
+		cout << "Harray!!!" << endl;
+	}
+	void info(){
+		cout << "id: " << id << endl;
+	}
+
+	//static method can only access static variable
+	static void get_animal_count() {
+		cout << "animal created: " << animalCount << endl;
+		cout << "max number: " << MAX << endl;
+	}
+};
+
+
+//pretend this is in .cpp file for the class...
+//has to initialize the value separately
+int Animal::animalCount = 0;
 
 //inline class
-//
-class Bird {
+// class inheritance
+class Bird: public Animal {
 private:
 	string name;
 
 public:
 	Bird(){cout << "Bird created" << endl;};
+	// Bird constructor that calls Animal constructor
+	Bird(int id): Animal(id) {};
 	//copy object by passing the reference
 	//by default, C++ creates a copy rather than a reference like python!
 	//but the copy will not have the attributesm, such as name
@@ -56,6 +94,16 @@ Bird *createBird(string nm){
 	return pnewbird;
 }
 
+class BlueJay: public Bird {
+public:
+	BlueJay(){};
+	BlueJay(int id): Bird(id) {};
+	void puke(){
+		cout << "Bluejay puked!" << endl;
+	}
+
+};
+
 int main() {
 	/*
 	 get user input
@@ -65,6 +113,8 @@ int main() {
 	 cout << "Hello " + input << endl;
 	 cout << INT_MAX << endl;
 	*/
+
+
 	long int value = 3434323443434343;
 	cout << value << endl;
 	cout << sizeof(int) << endl;
@@ -198,6 +248,54 @@ int main() {
     bird5->speak();
     delete bird5; // now make sure we delete it since it's created via "new"
 
+    //one way to build a string using string constructor
+    //first arg is the len of the string, second is a char
+    string name(5, 'a');
+    cout << name << endl; // will prin ccccc
+
+    //create a string of a to z
+    char c = 'a';
+    for (int i=0; i<26; i++, c++){
+    	string alphabets(1, c);
+    	cout << alphabets << flush;
+    }
+
+    //allocate memory for array
+    Bird *pbirds = new Bird[5];
+    pbirds[3].setName("3rd bird");
+    pbirds[3].speak();
+    delete [] pbirds; //free the whole memory block
+
+
+    //pass array to a function
+    string texts[] = {"Hsin", "Kyle"};
+    passArrayToFunc(2, texts);
+
+    ///commom practice to get array returned by a function
+    char *mymemories = getMemory();
+    freeMemory(mymemories);
+
+    cout << getnumArr()[2] << endl;
+
+    //syntax to use the namespace without putting the entire namespace on the top of the file
+    hh::Pig pig;
+    pig.speak();
+    cout << hh::PIGNAME << endl;
+
+    Animal animal;
+    animal.jump();
+
+    BlueJay bluejay;
+    bluejay.jump();
+    bluejay.speak();
+    bluejay.puke();
+    bluejay.info();
+
+    BlueJay bj(2);
+    bj.info();
+
+    //access static varibale, get the number of Aninal instances created
+    Animal:: get_animal_count();
 
 	return 0;
 }
@@ -311,12 +409,45 @@ void reserveString(char target[], int size) {
 
 }
 
+
 void changeByReference(int &num){
 	// the variable that gets passed into is a reference
 	// meaning changing this one will change the original
 	num = 10000;
 };
 
+//pass array to a function 1
 void changeByRefArr(int (&num)[2]){
 	num[0] = 1000;
+}
+
+//pass array to a function 2 - pass size and pointer* (array is same as pointer)
+void passArrayToFunc(int sizeoftexts, string texts[]){
+	for(int i=0; i<sizeoftexts; i++){
+		cout << texts[i] << endl;
+	}
+}
+
+//return array from a function
+//when you declear an array in the function it will be deleted
+//when if gets out of scope. So return the pointer does not make sense since value  no longer exisgts
+//common practice in C++: if you create a function that allocate some memory,
+//you should create another function to deallocate that
+char *getMemory(){
+	//allocate memory using "new operator"
+	char *pMemo = new char[100];
+
+	return pMemo;
+}
+//free memory
+void freeMemory(char *pArr){
+	delete [] pArr;
+	cout << "memory destroyed" << endl;
+}
+
+//NEVER DO THIS!!! the returned address(pointer) might not have the values after the exit of the scope
+int *getnumArr(){
+	// do not return local variable!!
+	int myArr[] = {1, 2, 3, 4};
+	return myArr;
 }

@@ -7,18 +7,21 @@ CPP_SRCS += \
 ../src/Cat.cpp \
 ../src/Dog.cpp \
 ../src/Person.cpp \
+../src/Pig.cpp \
 ../src/coutputtingtext.cpp 
 
 OBJS += \
 ./src/Cat.o \
 ./src/Dog.o \
 ./src/Person.o \
+./src/Pig.o \
 ./src/coutputtingtext.o 
 
 CPP_DEPS += \
 ./src/Cat.d \
 ./src/Dog.d \
 ./src/Person.d \
+./src/Pig.d \
 ./src/coutputtingtext.d 
 
 
